@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตำบลพร้อมรับมือ – จันทบุรี และ ระยอง</title>
+<meta name="description" content="ดูว่าตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และทำอะไรได้บ้าง ข้อมูลระดับตำบล จังหวัดจันทบุรีและระยอง ปี 2567">
+<link rel="stylesheet" href="css/leaflet.css">
+<style>
+:root{--ink:#1f2a33;--muted:#5b6b78;--bg:#f6f8f7;--card:#fff;--line:#e3e8e6;--accent:#1d6f5a;--accent2:#e8f3ef;
+ --l1:#eef3f6;--l2:#cfe0ea;--l3:#9cbfd6;--l4:#5a8fb8;--l5:#2a5d86}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Sarabun','TH Sarabun New','Segoe UI',Tahoma,sans-serif;font-size:18px;line-height:1.6;color:var(--ink);background:var(--bg)}
+header{background:var(--accent);color:#fff;padding:18px 16px 14px}
+header h1{margin:0;font-size:26px;line-height:1.25}
+header p{margin:6px 0 0;font-size:16px;opacity:.95}
+.wrap{max-width:900px;margin:0 auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card h2{margin:0 0 8px;font-size:21px;color:var(--accent)}
+.card h3{margin:14px 0 6px;font-size:19px}
+.search{display:flex;gap:8px;flex-wrap:wrap}
+.search input{flex:1;min-width:200px;font:inherit;font-size:19px;padding:12px 14px;border:2px solid #b9c8c2;border-radius:12px}
+.btn{font:inherit;font-size:17px;padding:12px 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer}
+.btn.sec{background:var(--accent2);color:var(--accent);border:1px solid #bcd9cf}
+.btn:disabled{opacity:.6}
+#map{height:360px;border-radius:12px;border:1px solid var(--line);background:#dfe8ef}
+.lg{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:15px;margin-top:8px}
+.lg span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:20px;height:14px;border-radius:3px;border:1px solid #999;display:inline-block}
+.level{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;color:#fff}
+.level .big{font-size:22px;font-weight:700;line-height:1.3}
+.level .sub{font-size:15px;opacity:.95}
+.lvl1{background:#7a9bb0;color:#fff}.lvl2{background:#6b94b4}.lvl3{background:#4f82ad}.lvl4{background:#3a6d9c}.lvl5{background:#2a5d86}
+.dim{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.dim:first-of-type{border-top:0}
+.ico{font-size:30px;line-height:1;text-align:center}
+.tag{display:inline-block;font-size:14px;padding:2px 9px;border-radius:999px;background:#eef2f1;color:var(--muted);margin-left:6px}
+.tag.hi{background:#fde8d8;color:#8a4a12}
+.muted{color:var(--muted);font-size:15px}
+ul.clean{list-style:none;padding:0;margin:0}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.chk input{width:22px;height:22px;margin-top:4px;flex:none}
+.chk.done label{text-decoration:line-through;color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pill{background:#eef2f1;border-radius:10px;padding:8px 12px;font-size:16px}
+.pill b{font-size:20px}
+a{color:var(--accent)}
+footer{padding:20px 14px 40px;text-align:center;font-size:14px;color:var(--muted)}
+.hidden{display:none}
+.notice{background:#fff8e6;border-left:4px solid #e0a800;padding:10px 12px;border-radius:8px;font-size:15px;margin:10px 0}
+.leaflet-container{font-family:inherit;font-size:14px}
+.tt{font-size:15px;line-height:1.4}
+#result:target{scroll-margin-top:10px}
+@media (max-width:560px){header h1{font-size:22px} body{font-size:17px} .level .big{font-size:20px} #map{height:300px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>ตำบลพร้อมรับมือ</h1>
+<p>ตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และทำอะไรได้บ้าง · จังหวัดจันทบุรีและระยอง 134 ตำบล · ข้อมูลปี 2567</p>
+</div></header>
+
+<main class="wrap">
+<section class="card" id="find">
+  <h2>หาตำบลของเรา</h2>
+  <div class="search">
+    <input type="text" id="q" list="tlist" placeholder="พิมพ์ชื่อตำบล เช่น บ่อ ทรายขาว มาบตาพุด" autocomplete="off">
+    <datalist id="tlist"></datalist>
+    <button class="btn" id="goBtn">ดูตำบลนี้</button>
+    <button class="btn sec" id="locBtn">📍 ใช้ตำแหน่งของฉัน</button>
+  </div>
+  <p class="muted" id="findMsg">หรือแตะที่แผนที่ด้านล่าง</p>
+  <div id="map"></div>
+  <div class="lg" id="legend"></div>
+  <p class="muted">สีเข้ม = ควรเตรียมพร้อมมากเป็นพิเศษ ไม่ใช่การให้คะแนนว่าตำบลใดดีหรือไม่ดี</p>
+</section>
+
+<section id="result" class="hidden">
+  <div class="card">
+    <h2 id="rTitle">ตำบล</h2>
+    <div id="rLevel" class="level"></div>
+    <p class="muted" id="rNote"></p>
+  </div>
+  <div class="card">
+    <h2>ทำไมตำบลเราถึงเป็นแบบนี้</h2>
+    <p class="muted">เทียบกับค่าเฉลี่ยของตำบลทั้งจังหวัด ตัวเลขจากการสำรวจข้อมูลความจำเป็นพื้นฐาน (จปฐ.) ปี 2567</p>
+    <div id="rDims"></div>
+  </div>
+  <div class="card">
+    <h2>ภัยที่เคยมาเยือนปี 2567</h2>
+    <div class="row" id="rHaz"></div>
+    <p class="muted" id="rSeason"></p>
+  </div>
+  <div class="card">
+    <h2>สัปดาห์นี้ทำอะไรได้บ้าง</h2>
+    <p class="muted">เลือกทำทีละข้อ ติ๊กไว้ได้ (เครื่องนี้จะจำไว้ให้)</p>
+    <ul class="clean" id="rActs"></ul>
+  </div>
+  <div class="card">
+    <h2>ติดต่อใคร ไปที่ไหน</h2>
+    <div id="rContact"></div>
+    <h3>ศูนย์พักพิงในตำบล</h3>
+    <div id="rShelter"></div>
+  </div>
+  <div class="row"><button class="btn sec" id="shareBtn">คัดลอกลิงก์ตำบลนี้</button><button class="btn sec" id="backBtn">ดูตำบลอื่น</button></div>
+</section>
+
+<section class="card" id="about">
+  <h2>เว็บนี้คืออะไร</h2>
+  <p>เว็บนี้สรุปว่าคนในแต่ละตำบลของจังหวัดจันทบุรีและระยองมีเงื่อนไขทางสังคมที่ทำให้รับมือและฟื้นตัวจากภัยได้ยากมากน้อยเพียงใด เช่น มีผู้สูงอายุมาก รายได้น้อย หรือติดต่อสื่อสารยาก แล้วแปลงเป็น 5 ระดับการเตรียมพร้อม เพื่อให้ชุมชน องค์กรปกครองส่วนท้องถิ่น และหน่วยงานใช้จัดลำดับการสนับสนุน</p>
+  <ul>
+    <li>ข้อมูลเป็นภาพรวมของทั้งตำบลในปี 2567 ไม่ได้บอกว่าบ้านไหนหรือใครเปราะบาง</li>
+    <li>ระดับที่สูงหมายถึง "ควรได้รับการสนับสนุนมากขึ้น" ไม่ใช่การจัดอันดับว่าชุมชนใดดีกว่ากัน</li>
+    <li>ตำบลที่ระดับต่ำไม่ได้แปลว่าปลอดภัย ยังต้องดูภัยที่เคยเกิดและเตรียมพร้อมตามฤดู</li>
+    <li>ตำบลในเขตเมืองบางแห่งข้อมูลสำรวจครอบคลุมครัวเรือนได้บางส่วน ค่าจึงอาจต่ำกว่าความเป็นจริง</li>
+  </ul>
+  <p>จัดทำโดยโครงการวิจัยการประเมินความเสี่ยงด้านภูมิอากาศจังหวัดระยองและจันทบุรี ผู้ที่ต้องการข้อมูลเชิงวิชาการ (ดัชนี SoVI ค่าสถิติ และแผนที่เชิงลึก) ดูได้ที่ <a href="https://juthasinee.github.io/SoVI-map/" target="_blank" rel="noopener">เว็บข้อมูลเชิงวิชาการ</a></p>
+  <div id="feedbackBox" class="hidden"><a class="btn sec" id="feedbackLink" target="_blank" rel="noopener">แจ้งข้อมูลที่ไม่ตรงกับพื้นที่</a></div>
+</section>
+</main>
+<footer>ข้อมูลปี 2567 · ปรับปรุง <span id="updated"></span> · ขอบเขตตำบลตามชั้นข้อมูลมาตรฐานของกรมแผนที่ทหาร (COD-AB)</footer>
+
+<script src="js/leaflet.js"></script>
+<script>
+var FEEDBACK_URL = "";   // ใส่ลิงก์ฟอร์มแจ้งข้อมูลเมื่อพร้อม
+var LCOL = {1:getComputedStyle(document.documentElement).getPropertyValue('--l1').trim(),2:getComputedStyle(document.documentElement).getPropertyValue('--l2').trim(),3:getComputedStyle(document.documentElement).getPropertyValue('--l3').trim(),4:getComputedStyle(document.documentElement).getPropertyValue('--l4').trim(),5:getComputedStyle(document.documentElement).getPropertyValue('--l5').trim()};
+var LSHORT = {1:'ตามปกติ',2:'ตามปกติ ติดตามข่าว',3:'เตรียมพร้อมเพิ่มขึ้น',4:'เตรียมพร้อมเป็นพิเศษ',5:'เป็นพิเศษ และขอการสนับสนุน'};
+var DIMNAME = {PC1:'ผู้สูงอายุมาก', PC2:'รายได้และการศึกษา', PC3:'การติดต่อสื่อสาร'};
+var DIMICON = {PC1:'👵', PC2:'🌾', PC3:'📢'};
+var ACTS = {
+ PC1:['ทำบัญชีผู้สูงอายุติดบ้าน ติดเตียง และผู้พิการในหมู่บ้าน พร้อมชื่อคนที่จะไปรับเมื่อต้องอพยพ','ซ้อมเดินเส้นทางจากบ้านไปจุดปลอดภัยกับผู้สูงอายุ และดูว่าใครต้องการรถหรือคนช่วยพยุง','จัดยาประจำตัว บัตรประชาชน และบัตรสิทธิรักษา ใส่ถุงพร้อมหิ้วไว้ที่เดิมเสมอ'],
+ PC2:['ตรวจสิทธิบัตรสวัสดิการแห่งรัฐ เบี้ยยังชีพ และสิทธิรักษาพยาบาลของทุกคนในบ้านให้ครบ','ถ้าทำเกษตร สอบถาม อบต. หรือเกษตรอำเภอเรื่องการขึ้นทะเบียนเกษตรกรและการช่วยเหลือเมื่อเกิดภัย','ติดตามข่าวเตือนภัยจากแหล่งทางการ (กรมอุตุนิยมวิทยา ปภ.) แทนการรอฟังต่อ ๆ กัน'],
+ PC3:['ตั้งกลุ่มไลน์หมู่บ้าน และกำหนดคนส่งข่าวให้บ้านที่ไม่มีมือถือหรืออินเทอร์เน็ตโดยเฉพาะ','ขอให้ผู้ใหญ่บ้านทดสอบหอกระจายข่าวหรือเสียงตามสายก่อนเข้าฤดูภัย','จดเบอร์ อบต./เทศบาล สายด่วน 1784 และ 1669 ติดไว้ที่ข้างฝาบ้านทุกหลัง'],
+ ALL:['รู้ว่าศูนย์พักพิงหรือจุดปลอดภัยที่ใกล้ที่สุดอยู่ที่ไหน และไปอย่างไร','เตรียมน้ำดื่ม อาหารแห้ง ไฟฉาย และแบตสำรองสำหรับ 3 วัน','คุยกันในบ้านว่าถ้าเกิดภัยตอนกลางคืนจะทำอย่างไร ใครดูแลใคร']
+};
+var DATA=null, GEO=null, map, geoLayer, byId={}, current=null;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function nf(n){return Number(n).toLocaleString('th-TH')}
+function tenth(p){var k=Math.round(p/10);return k<1?'ไม่ถึง 1':String(k)}
+function cmpTxt(c,avg){return c==='ใกล้เคียง'?'ใกล้เคียงค่าเฉลี่ยจังหวัด':(c+'ค่าเฉลี่ยจังหวัด ('+avg+')')}
+function season(){var m=new Date().getMonth()+1; if(m>=2&&m<=5)return 'ตอนนี้อยู่ในช่วงฤดูแล้งและอากาศร้อน (กุมภาพันธ์ถึงพฤษภาคม) ควรสำรองน้ำและดูแลผู้สูงอายุจากความร้อน'; if(m>=6&&m<=10)return 'ตอนนี้อยู่ในฤดูฝน (พฤษภาคมถึงตุลาคม ฝนชุกที่สุดมิถุนายนถึงกันยายน) เฝ้าระวังน้ำท่วมและลมพายุ'; return 'ช่วงนี้นอกฤดูภัยหลัก เป็นเวลาที่ดีสำหรับซ้อมแผนและเตรียมของ'}
+function fmtTam(t){return 'ต.'+t.tam+' อ.'+t.amp+' จ.'+t.prov}
+
+fetch('data/tambons.json').then(function(r){return r.json()}).then(function(d){DATA=d;d.tambons.forEach(function(t){byId[t.id]=t});
+  document.getElementById('updated').textContent=d.meta.updated;
+  var dl=document.getElementById('tlist');d.tambons.forEach(function(t){var o=document.createElement('option');o.value=t.tam+' (อ.'+t.amp+' จ.'+t.prov+')';dl.appendChild(o)});
+  var lg=document.getElementById('legend');[1,2,3,4,5].forEach(function(l){var s=document.createElement('span');s.innerHTML='<i class="sw" style="background:'+LCOL[l]+'"></i>'+LSHORT[l];lg.appendChild(s)});
+  if(FEEDBACK_URL){document.getElementById('feedbackLink').href=FEEDBACK_URL;document.getElementById('feedbackBox').classList.remove('hidden')}
+  return fetch('data/tambons.geojson')}).then(function(r){return r.json()}).then(function(g){GEO=g;initMap();var h=location.hash.replace('#','');if(h&&byId[h])show(h)});
+
+function initMap(){
+  map=L.map('map',{attributionControl:false,scrollWheelZoom:false}).setView([12.8,101.8],8);
+  L.control.scale({imperial:false}).addTo(map);
+  var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:16,opacity:.6});osm.addTo(map);
+  geoLayer=L.geoJSON(GEO,{style:function(f){var t=byId[f.properties.id];return {fillColor:LCOL[t.level],fillOpacity:.85,color:'#fff',weight:1}},
+    onEachFeature:function(f,lyr){var t=byId[f.properties.id];
+      lyr.bindTooltip('<b>ต.'+esc(t.tam)+'</b> อ.'+esc(t.amp)+'<br>'+LSHORT[t.level],{sticky:true,className:'tt'});
+      lyr.on('click',function(){show(t.id)});
+      lyr.on('mouseover',function(){lyr.setStyle({weight:3,color:'#333'});lyr.bringToFront()});
+      lyr.on('mouseout',function(){geoLayer.resetStyle(lyr)});}}).addTo(map);
+  map.fitBounds(geoLayer.getBounds(),{padding:[6,6]});
+}
+function findByName(q){q=q.trim();if(!q)return null;var name=q.split(' (')[0].replace(/^ต\./,'');
+  var hits=DATA.tambons.filter(function(t){return t.tam===name});
+  if(hits.length>1&&q.indexOf('อ.')>=0){var amp=q.split('อ.')[1].split(' ')[0];hits=hits.filter(function(t){return t.amp===amp})}
+  if(!hits.length)hits=DATA.tambons.filter(function(t){return t.tam.indexOf(name)>=0});
+  return hits.length?hits[0]:null}
+document.getElementById('goBtn').onclick=function(){var t=findByName(document.getElementById('q').value);if(t)show(t.id);else document.getElementById('findMsg').textContent='ไม่พบตำบลชื่อนี้ ลองพิมพ์ใหม่หรือเลือกจากรายการ'};
+document.getElementById('q').addEventListener('change',function(){var t=findByName(this.value);if(t)show(t.id)});
+document.getElementById('locBtn').onclick=function(){
+  var msg=document.getElementById('findMsg');if(!navigator.geolocation){msg.textContent='เครื่องนี้ไม่รองรับการระบุตำแหน่ง';return}
+  msg.textContent='กำลังหาตำแหน่ง...';
+  navigator.geolocation.getCurrentPosition(function(p){var id=locate(p.coords.longitude,p.coords.latitude);
+    if(id){msg.textContent='พบว่าคุณอยู่ใน '+fmtTam(byId[id]);show(id)}else msg.textContent='ตำแหน่งของคุณอยู่นอกจังหวัดจันทบุรีและระยอง ลองพิมพ์ชื่อตำบลแทน'},
+    function(){msg.textContent='ไม่ได้รับอนุญาตให้ใช้ตำแหน่ง ลองพิมพ์ชื่อตำบลแทน'},{timeout:10000});
+};
+function pip(pt,ring){var x=pt[0],y=pt[1],inside=false;for(var i=0,j=ring.length-1;i<ring.length;j=i++){var xi=ring[i][0],yi=ring[i][1],xj=ring[j][0],yj=ring[j][1];
+  if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside}return inside}
+function locate(lon,lat){var pt=[lon,lat];for(var k=0;k<GEO.features.length;k++){var f=GEO.features[k],g=f.geometry,polys=g.type==='Polygon'?[g.coordinates]:g.coordinates;
+  for(var p=0;p<polys.length;p++){if(pip(pt,polys[p][0])){var hole=false;for(var h=1;h<polys[p].length;h++)if(pip(pt,polys[p][h]))hole=true;if(!hole)return f.properties.id}}}return null}
+
+function show(id){var t=byId[id];if(!t)return;current=t;var L5=DATA.meta.levels[String(t.level)];var avg=DATA.meta.prov_avg[t.prov];
+  document.getElementById('rTitle').textContent=fmtTam(t);
+  var lv=document.getElementById('rLevel');lv.className='level lvl'+t.level;lv.innerHTML='<div style="font-size:34px">'+['','🟢','🟢','🟡','🟠','🔴'][t.level].replace(/./g,'')+'</div><div><div class="big">ระดับ '+t.level+' จาก 5: '+esc(L5)+'</div><div class="sub">เทียบกับตำบลทั้งหมดของจันทบุรีและระยอง 134 ตำบล</div></div>';
+  var note='ประชากรที่สำรวจ '+nf(t.pop)+' คน '+nf(t.hh)+' ครัวเรือน';
+  if(t.coverage<40)note+=' · ข้อมูลสำรวจครอบคลุมประชากรตามทะเบียนราษฎรประมาณร้อยละ '+Math.round(t.coverage)+' ตัวเลขของตำบลเมืองจึงอาจต่ำกว่าความเป็นจริง';
+  if(t.cluster==='HH')note+=' · ตำบลรอบ ๆ ก็อยู่ในระดับสูงเช่นกัน เหมาะกับการร่วมมือกันหลายตำบล';
+  document.getElementById('rNote').textContent=note;
+  var dims=[['PC1','ผู้สูงอายุ <b>'+t.eld_pct+'%</b> ของคนในตำบล (ประมาณ '+tenth(t.eld_pct)+' ใน 10 คน) '+cmpTxt(t.eld_cmp,avg.eld_pct+'%')+' · เด็ก '+t.child_pct+'% · ผู้พิการ <b>'+t.dis_per100+'</b> คนต่อ 100 คน ('+cmpTxt(t.dis_cmp,avg.dis_per100)+')'],
+   ['PC2','ผู้ใหญ่ที่เรียนไม่ถึงมัธยมปลาย <b>'+t.lowedu_pct+'%</b> ('+cmpTxt(t.lowedu_cmp,avg.lowedu_pct+'%')+') · รายได้เฉลี่ย <b>'+nf(t.income)+'</b> บาทต่อคนต่อปี ('+cmpTxt(t.income_cmp,nf(avg.income)+' บาท')+')'],
+   ['PC3','ครัวเรือนที่ไม่มีอินเทอร์เน็ตที่บ้าน <b>'+t.nonet_pct+'%</b> ('+cmpTxt(t.nonet_cmp,avg.nonet_pct+'%')+') · ครัวเรือนที่ไม่มีโทรศัพท์มือถือ '+t.nophone_pct+'% · ผู้สูงอายุที่ไม่มีรายได้ทางใดเลย '+nf(t.eld_noinc)+' คน จาก '+nf(t.eld_n)+' คน']];
+  dims.sort(function(a,b){return t.pc[b[0]]-t.pc[a[0]]});
+  document.getElementById('rDims').innerHTML=dims.map(function(d){var f=t.pcflag[d[0]];return '<div class="dim"><div class="ico">'+DIMICON[d[0]]+'</div><div><b>'+DIMNAME[d[0]]+'</b><span class="tag'+(f==='สูง'?' hi':'')+'">'+(f==='สูง'?'เรื่องที่ต้องใส่ใจ':(f==='ต่ำ'?'ไม่ใช่ปัญหาหลัก':'ปานกลาง'))+'</span><br><span style="font-size:16px">'+d[1]+'</span></div></div>'}).join('');
+  var hz=[['🌊 น้ำท่วม',t.flood],['🌬️ ลมพายุ',t.storm],['☀️ ภัยแล้ง',t.drought]];
+  document.getElementById('rHaz').innerHTML=hz.map(function(h){return '<div class="pill">'+h[0]+'<br><b>'+(h[1]?h[1]+' หมู่บ้าน':'ไม่มีประกาศ')+'</b></div>'}).join('')+'<div class="muted" style="flex-basis:100%">จำนวนหมู่บ้านในตำบลที่ประกาศเป็นเขตพื้นที่ประสบภัย ปี 2567 (ข้อมูลกรมป้องกันและบรรเทาสาธารณภัย) ตำบลที่ไม่มีประกาศไม่ได้แปลว่าไม่มีความเสี่ยง</div>';
+  document.getElementById('rSeason').textContent=season();
+  var acts=ACTS[t.dom].concat(ACTS.ALL);var key='tr_'+t.id;var done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+  var ul=document.getElementById('rActs');ul.innerHTML='';acts.forEach(function(a,i){var li=document.createElement('li');li.className='chk'+(done[i]?' done':'');
+    li.innerHTML='<input type="checkbox" id="a'+i+'"'+(done[i]?' checked':'')+'><label for="a'+i+'">'+esc(a)+'</label>';
+    li.querySelector('input').onchange=function(){done[i]=this.checked;li.classList.toggle('done',this.checked);try{localStorage.setItem(key,JSON.stringify(done))}catch(e){}};ul.appendChild(li)});
+  var c='<p><b>สายด่วนแจ้งเหตุสาธารณภัย 1784</b> (กรมป้องกันและบรรเทาสาธารณภัย) · เจ็บป่วยฉุกเฉิน <b>1669</b> · เหตุด่วน <b>191</b></p>';
+  if(t.contacts.length)c+='<p>'+t.contacts.map(function(x){return '<b>'+esc(x.name)+'</b> โทร '+esc(x.tel)+(x.web?' · <a href="'+esc(x.web)+'" target="_blank" rel="noopener">เว็บไซต์</a>':'')}).join('<br>')+'</p>';
+  else c+='<p class="muted">เบอร์ อบต./เทศบาลของตำบลนี้กำลังรวบรวม ติดต่อผ่านที่ว่าการอำเภอ'+esc(t.amp)+' หรือสายด่วน 1784 ไปก่อน</p>';
+  document.getElementById('rContact').innerHTML=c;
+  var sh=document.getElementById('rShelter');
+  if(t.shelters.length)sh.innerHTML='<ul>'+t.shelters.map(function(s){return '<li>'+esc(s.name)+(s.cap?' (รองรับประมาณ '+nf(s.cap)+' คน)':'')+'</li>'}).join('')+'</ul><p class="muted">ข้อมูลศูนย์พักพิงจากสำนักงานป้องกันและบรรเทาสาธารณภัยจังหวัด ควรยืนยันกับ อบต./เทศบาลก่อนใช้</p>';
+  else sh.innerHTML='<p class="muted">'+(t.prov==='ระยอง'?'ข้อมูลศูนย์พักพิงของจังหวัดระยองจะเพิ่มในระยะต่อไป สอบถามจุดปลอดภัยได้ที่ อบต./เทศบาล':'ยังไม่มีศูนย์พักพิงที่ขึ้นทะเบียนในตำบลนี้ สอบถามจุดปลอดภัยและศูนย์ของตำบลข้างเคียงได้ที่ อบต./เทศบาล')+'</p>';
+  document.getElementById('result').classList.remove('hidden');location.hash=t.id;
+  document.getElementById('result').scrollIntoView({behavior:'smooth'});
+  if(geoLayer){geoLayer.eachLayer(function(l){if(l.feature.properties.id===t.id)map.fitBounds(l.getBounds(),{maxZoom:11,padding:[10,10]})})}
+}
+document.getElementById('backBtn').onclick=function(){document.getElementById('find').scrollIntoView({behavior:'smooth'});document.getElementById('q').focus()};
+document.getElementById('shareBtn').onclick=function(){var u=location.href.split('#')[0]+'#'+(current?current.id:'');
+  if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){alert('คัดลอกลิงก์แล้ว: '+u)})}else prompt('คัดลอกลิงก์นี้',u)};
+window.addEventListener('hashchange',function(){var h=location.hash.replace('#','');if(h&&byId[h]&&(!current||current.id!==h))show(h)});
+</script>
+</body>
+</html>
