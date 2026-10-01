@@ -3,82 +3,132 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TambonPrompt ตำบลพร้อมรับมือ – จันทบุรี และ ระยอง</title>
-<meta name="description" content="ดูว่าตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และทำอะไรได้บ้าง ข้อมูลระดับตำบล จังหวัดจันทบุรีและระยอง ปี 2567">
+<title>TambonPrompt ตำบลพร้อม – พร้อมรู้ พร้อมรับ พร้อมฟื้น</title>
+<meta name="description" content="ตำบลพร้อม: ดูว่าตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และทำอะไรได้บ้าง ข้อมูลระดับตำบล จังหวัดจันทบุรีและระยอง ปี 2567">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="css/leaflet.css">
 <style>
-:root{--ink:#1f2a33;--muted:#5b6b78;--bg:#f6f8f7;--card:#fff;--line:#e3e8e6;--accent:#1d6f5a;--accent2:#e8f3ef;
- --l1:#eef3f6;--l2:#cfe0ea;--l3:#9cbfd6;--l4:#5a8fb8;--l5:#2a5d86}
+:root{--primary:#0B5563;--primary-dk:#083E4A;--accent:#E8A33D;--ink:#15262B;--body:#3C5057;--muted:#5A6E74;--mist:#F6F7F4;--card:#FFFFFF;--line:#E1E5E2;--green:#2E7D4F;
+ --l1:#E6EFEC;--l2:#BDD6D2;--l3:#86B3B5;--l4:#428694;--l5:#0B5563}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:'Sarabun','TH Sarabun New','Segoe UI',Tahoma,sans-serif;font-size:18px;line-height:1.6;color:var(--ink);background:var(--bg)}
-header{background:var(--accent);color:#fff;padding:18px 16px 14px}
-header h1{margin:0;font-size:26px;line-height:1.25}
-header p{margin:6px 0 0;font-size:16px;opacity:.95}
-.wrap{max-width:900px;margin:0 auto;padding:0 14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.card h2{margin:0 0 8px;font-size:21px;color:var(--accent)}
-.card h3{margin:14px 0 6px;font-size:19px}
-.search{display:flex;gap:8px;flex-wrap:wrap}
-.search input{flex:1;min-width:200px;font:inherit;font-size:19px;padding:12px 14px;border:2px solid #b9c8c2;border-radius:12px}
-.btn{font:inherit;font-size:17px;padding:12px 16px;border:0;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer}
-.btn.sec{background:var(--accent2);color:var(--accent);border:1px solid #bcd9cf}
-.btn:disabled{opacity:.6}
-#map{height:360px;border-radius:12px;border:1px solid var(--line);background:#dfe8ef}
-.lg{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:15px;margin-top:8px}
+body{margin:0;font-family:'IBM Plex Sans Thai','Prompt','Sarabun','Segoe UI',Tahoma,sans-serif;font-size:18px;line-height:1.6;color:var(--ink);background:var(--mist)}
+h1,h2,h3,.brand,.btn{font-family:'Prompt','IBM Plex Sans Thai',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{background:var(--mist);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:22px;font-weight:600;letter-spacing:-.3px}
+.brand b{color:var(--accent);font-weight:700}
+nav{display:flex;align-items:center;gap:18px;font-size:16px;font-weight:500}
+nav a{color:var(--ink);text-decoration:none;padding:8px 2px}
+nav a.cta{background:var(--primary);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;white-space:nowrap}
+.hero{padding:40px 0 20px}
+.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:center}
+.badge{display:inline-block;font-size:14px;font-weight:600;color:var(--primary);background:#fff;border:1px solid #D5DDDA;border-radius:999px;padding:6px 14px}
+.hero h1{margin:14px 0 10px;font-size:48px;font-weight:600;line-height:1.1;letter-spacing:-1px}
+.hero h1 span{color:var(--primary)}
+.hero p.lead{margin:0 0 18px;font-size:20px;color:var(--body);max-width:520px}
+.search{display:flex;gap:10px;flex-wrap:wrap}
+.search input{flex:1;min-width:220px;font:inherit;font-size:18px;padding:13px 16px;border:1px solid #CBD5D1;border-radius:12px;background:#fff}
+.btn{font-size:17px;font-weight:600;padding:13px 20px;border:0;border-radius:12px;background:var(--primary);color:#fff;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid #D5DDDA}
+.btn.amber{background:var(--accent);color:var(--ink)}
+.stats{display:flex;gap:28px;margin-top:22px;flex-wrap:wrap}
+.stats div{display:flex;flex-direction:column}
+.stats b{font-family:'Prompt',sans-serif;font-size:30px;font-weight:600;color:var(--primary);line-height:1.1}
+.stats span{font-size:14px;color:var(--muted)}
+.mapcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.mapcard .ttl{display:flex;justify-content:space-between;align-items:center;font-family:'Prompt',sans-serif;font-weight:600;font-size:17px}
+.mapcard .ttl span{font-family:inherit;font-weight:400;font-size:13px;color:var(--muted)}
+#map{height:380px;border-radius:12px;background:#E8EEEB}
+.ramp{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.ramp i{flex:1;height:10px;border-radius:999px;background:linear-gradient(90deg,#DCE9E4,#0B5563)}
+.lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--body)}
 .lg span{display:inline-flex;align-items:center;gap:6px}
-.sw{width:20px;height:14px;border-radius:3px;border:1px solid #999;display:inline-block}
-.level{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;color:#fff}
-.level .big{font-size:22px;font-weight:700;line-height:1.3}
-.level .sub{font-size:15px;opacity:.95}
-.lvl1{background:#7a9bb0;color:#fff}.lvl2{background:#6b94b4}.lvl3{background:#4f82ad}.lvl4{background:#3a6d9c}.lvl5{background:#2a5d86}
-.dim{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
-.dim:first-of-type{border-top:0}
-.ico{font-size:30px;line-height:1;text-align:center}
-.tag{display:inline-block;font-size:14px;padding:2px 9px;border-radius:999px;background:#eef2f1;color:var(--muted);margin-left:6px}
-.tag.hi{background:#fde8d8;color:#8a4a12}
+.sw{width:18px;height:12px;border-radius:3px;border:1px solid #B8C4C0;display:inline-block}
+.pillars{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px}
+.pillars .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:34px 20px}
+.pillar{display:flex;flex-direction:column;gap:8px}
+.pic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.pillar h3{margin:0;font-size:22px;font-weight:600}
+.pillar p{margin:0;font-size:16px;color:var(--body)}
+.sec{padding:26px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}
+.card h2{margin:0 0 8px;font-size:22px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:10px}
+.card h2 .pic{width:34px;height:34px;border-radius:9px}
+.card h3{margin:16px 0 6px;font-size:18px;font-weight:600}
+.level{display:flex;gap:14px;align-items:center;padding:16px 18px;border-radius:14px}
+.level .big{font-family:'Prompt',sans-serif;font-size:22px;font-weight:600;line-height:1.3}
+.level .sub{font-size:15px;opacity:.9}
+.lvl1,.lvl2{background:var(--l2);color:var(--ink)}.lvl1{background:var(--l1)}.lvl3{background:var(--l3);color:#fff}.lvl4{background:var(--l4);color:#fff}.lvl5{background:var(--l5);color:#fff}
+.dim{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.dim:first-child{border-top:0}
+.dico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--mist)}
+.tag{display:inline-block;font-size:13px;padding:2px 10px;border-radius:999px;background:#EEF2F1;color:var(--muted);margin-left:6px;vertical-align:middle}
+.tag.hi{background:#FBEBD0;color:#7A4A05}
 .muted{color:var(--muted);font-size:15px}
 ul.clean{list-style:none;padding:0;margin:0}
-.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
-.chk input{width:22px;height:22px;margin-top:4px;flex:none}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.chk input{width:22px;height:22px;margin-top:4px;flex:none;accent-color:var(--primary)}
 .chk.done label{text-decoration:line-through;color:var(--muted)}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.pill{background:#eef2f1;border-radius:10px;padding:8px 12px;font-size:16px}
-.pill b{font-size:20px}
-a{color:var(--accent)}
-footer{padding:20px 14px 40px;text-align:center;font-size:14px;color:var(--muted)}
+.pill{background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:16px;min-width:120px}
+.pill b{font-family:'Prompt',sans-serif;font-size:20px;color:var(--primary)}
+a{color:var(--primary)}
+footer{background:var(--ink);color:#BFD3D8;padding:28px 20px 40px;margin-top:40px;font-size:14px}
+footer .wrap{display:flex;flex-direction:column;gap:10px}
+footer .brand{color:#fff;font-size:20px}
 .hidden{display:none}
-.notice{background:#fff8e6;border-left:4px solid #e0a800;padding:10px 12px;border-radius:8px;font-size:15px;margin:10px 0}
+.notice{background:#FFF7E6;border-left:4px solid var(--accent);padding:10px 14px;border-radius:8px;font-size:15px;margin:10px 0}
 .leaflet-container{font-family:inherit;font-size:14px}
 .tt{font-size:15px;line-height:1.4}
-#result:target{scroll-margin-top:10px}
-@media (max-width:560px){header h1{font-size:22px} body{font-size:17px} .level .big{font-size:20px} #map{height:300px}}
+@media (max-width:820px){.hero .grid{grid-template-columns:1fr}.pillars .wrap{grid-template-columns:1fr;gap:18px}nav a:not(.cta){display:none}}
+@media (max-width:560px){body{font-size:17px}nav a.cta{font-size:14px;padding:9px 12px}.hero h1{font-size:36px}.hero p.lead{font-size:18px}#map{height:300px}.brand{font-size:20px}.level .big{font-size:19px}}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-<h1>ตำบลพร้อมรับมือ <span style="font-size:16px;font-weight:400;opacity:.9">TambonPrompt</span></h1>
-<p>ตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และทำอะไรได้บ้าง · จังหวัดจันทบุรีและระยอง 134 ตำบล · ข้อมูลปี 2567</p>
+  <a class="brand" href="#top" aria-label="TambonPrompt ตำบลพร้อม">
+    <svg width="38" height="38" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 5C20.4 5 11 14.1 11 25.4 11 41.5 32 60 32 60s21-18.5 21-34.6C53 14.1 43.6 5 32 5z" fill="#0B5563"/><path d="M21.5 26.5l7.5 7.5 14-15" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="47" cy="47" r="9" fill="#E8A33D" stroke="#F6F7F4" stroke-width="3"/></svg>
+    <span>Tambon<b>Prompt</b></span>
+  </a>
+  <nav><a href="#find">แผนที่</a><a href="#result" id="navResult">ตำบลของเรา</a><a href="#about">เกี่ยวกับ</a><a class="cta" href="#find">หาตำบลของเรา</a></nav>
 </div></header>
 
-<main class="wrap">
-<section class="card" id="find">
-  <h2>หาตำบลของเรา</h2>
-  <div class="search">
-    <input type="text" id="q" list="tlist" placeholder="พิมพ์ชื่อตำบล เช่น บ่อ ทรายขาว มาบตาพุด" autocomplete="off">
-    <datalist id="tlist"></datalist>
-    <button class="btn" id="goBtn">ดูตำบลนี้</button>
-    <button class="btn sec" id="locBtn">📍 ใช้ตำแหน่งของฉัน</button>
+<main id="top">
+<section class="hero"><div class="wrap grid">
+  <div>
+    <span class="badge">ความพร้อมรับมือภัยระดับตำบล · จันทบุรีและระยอง · ข้อมูลปี 2567</span>
+    <h1>ตำบลพร้อม<br><span>พร้อมรู้ พร้อมรับ พร้อมฟื้น</span></h1>
+    <p class="lead">รู้ว่าตำบลของเราควรเตรียมพร้อมรับมือภัยแค่ไหน เพราะอะไร และสัปดาห์นี้ทำอะไรได้บ้าง</p>
+    <div class="search" id="find">
+      <input type="text" id="q" list="tlist" placeholder="พิมพ์ชื่อตำบล เช่น บ่อ ทรายขาว มาบตาพุด" autocomplete="off" aria-label="ชื่อตำบล">
+      <datalist id="tlist"></datalist>
+      <button class="btn" id="goBtn">ดูตำบลนี้</button>
+      <button class="btn sec" id="locBtn">ใช้ตำแหน่งของฉัน</button>
+    </div>
+    <p class="muted" id="findMsg">หรือแตะที่ตำบลบนแผนที่</p>
+    <div class="stats"><div><b>134</b><span>ตำบลที่มีข้อมูล</span></div><div><b>2</b><span>จังหวัด</span></div><div><b>2567</b><span>ปีข้อมูล</span></div></div>
   </div>
-  <p class="muted" id="findMsg">หรือแตะที่แผนที่ด้านล่าง</p>
-  <div id="map"></div>
-  <div class="lg" id="legend"></div>
-  <p class="muted">สีเข้ม = ควรเตรียมพร้อมมากเป็นพิเศษ ไม่ใช่การให้คะแนนว่าตำบลใดดีหรือไม่ดี</p>
-</section>
+  <div class="mapcard">
+    <div class="ttl">ระดับการเตรียมพร้อมของแต่ละตำบล <span>แตะเพื่อดูรายละเอียด</span></div>
+    <div id="map"></div>
+    <div class="ramp"><span>ตามปกติ</span><i></i><span>เป็นพิเศษ</span></div>
+    <div class="lg" id="legend"></div>
+    <p class="muted" style="margin:0">สีเข้ม = ควรเตรียมพร้อมมากเป็นพิเศษ ไม่ใช่การให้คะแนนว่าตำบลใดดีหรือไม่ดี</p>
+  </div>
+</div></section>
 
-<section id="result" class="hidden">
+<section class="pillars"><div class="wrap">
+  <div class="pillar"><div class="pic" style="background:var(--primary)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><h3>พร้อมรู้</h3><p>รู้ระดับการเตรียมพร้อมของตำบล และเหตุผลที่เป็นแบบนั้นด้วยภาษาง่าย ๆ</p></div>
+  <div class="pillar"><div class="pic" style="background:var(--accent)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#15262B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>พร้อมรับ</h3><p>รายการสิ่งที่ทำได้ทันทีในสัปดาห์นี้ และเบอร์ติดต่อเมื่อเกิดเหตุ</p></div>
+  <div class="pillar"><div class="pic" style="background:var(--green)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></div><h3>พร้อมฟื้น</h3><p>ศูนย์พักพิงใกล้บ้าน และการช่วยเหลือเพื่อกลับมาใช้ชีวิตได้เร็ว</p></div>
+</div></section>
+
+<section id="result" class="wrap sec hidden">
   <div class="card">
-    <h2 id="rTitle">ตำบล</h2>
+    <h2><span class="pic" style="background:var(--primary)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span><span id="rTitle">ตำบล</span></h2>
     <div id="rLevel" class="level"></div>
     <p class="muted" id="rNote"></p>
   </div>
@@ -93,41 +143,50 @@ footer{padding:20px 14px 40px;text-align:center;font-size:14px;color:var(--muted
     <p class="muted" id="rSeason"></p>
   </div>
   <div class="card">
-    <h2>สัปดาห์นี้ทำอะไรได้บ้าง</h2>
+    <h2><span class="pic" style="background:var(--accent)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15262B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"/><path d="M9 12l2 2 4-4"/></svg></span>พร้อมรับ: สัปดาห์นี้ทำอะไรได้บ้าง</h2>
     <p class="muted">เลือกทำทีละข้อ ติ๊กไว้ได้ (เครื่องนี้จะจำไว้ให้)</p>
     <ul class="clean" id="rActs"></ul>
+    <h3>ติดต่อใครเมื่อเกิดเหตุ</h3>
+    <div id="rContact"></div>
   </div>
   <div class="card">
-    <h2>ติดต่อใคร ไปที่ไหน</h2>
-    <div id="rContact"></div>
-    <h3>ศูนย์พักพิงในตำบล</h3>
+    <h2><span class="pic" style="background:var(--green)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></span>พร้อมฟื้น: ศูนย์พักพิงและการช่วยเหลือ</h2>
     <div id="rShelter"></div>
+    <p class="muted">หลังเกิดภัย แจ้งความเสียหายกับ อบต./เทศบาล ภายใน 30 วัน เพื่อขอรับการช่วยเหลือตามระเบียบ และเก็บภาพถ่ายความเสียหายไว้เป็นหลักฐาน</p>
   </div>
   <div class="row"><button class="btn sec" id="shareBtn">คัดลอกลิงก์ตำบลนี้</button><button class="btn sec" id="backBtn">ดูตำบลอื่น</button></div>
 </section>
 
-<section class="card" id="about">
-  <h2>เว็บนี้คืออะไร</h2>
-  <p>เว็บนี้สรุปว่าคนในแต่ละตำบลของจังหวัดจันทบุรีและระยองมีเงื่อนไขทางสังคมที่ทำให้รับมือและฟื้นตัวจากภัยได้ยากมากน้อยเพียงใด เช่น มีผู้สูงอายุมาก รายได้น้อย หรือติดต่อสื่อสารยาก แล้วแปลงเป็น 5 ระดับการเตรียมพร้อม เพื่อให้ชุมชน องค์กรปกครองส่วนท้องถิ่น และหน่วยงานใช้จัดลำดับการสนับสนุน</p>
-  <ul>
-    <li>ข้อมูลเป็นภาพรวมของทั้งตำบลในปี 2567 ไม่ได้บอกว่าบ้านไหนหรือใครเปราะบาง</li>
-    <li>ระดับที่สูงหมายถึง "ควรได้รับการสนับสนุนมากขึ้น" ไม่ใช่การจัดอันดับว่าชุมชนใดดีกว่ากัน</li>
-    <li>ตำบลที่ระดับต่ำไม่ได้แปลว่าปลอดภัย ยังต้องดูภัยที่เคยเกิดและเตรียมพร้อมตามฤดู</li>
-    <li>ตำบลในเขตเมืองบางแห่งข้อมูลสำรวจครอบคลุมครัวเรือนได้บางส่วน ค่าจึงอาจต่ำกว่าความเป็นจริง</li>
-  </ul>
-  <p>จัดทำโดยโครงการวิจัยการประเมินความเสี่ยงด้านภูมิอากาศจังหวัดระยองและจันทบุรี ผู้ที่ต้องการข้อมูลเชิงวิชาการ (ดัชนี SoVI ค่าสถิติ และแผนที่เชิงลึก) ดูได้ที่ <a href="https://juthasinee.github.io/SoVI-map/" target="_blank" rel="noopener">เว็บข้อมูลเชิงวิชาการ</a></p>
-  <div id="feedbackBox" class="hidden"><a class="btn sec" id="feedbackLink" target="_blank" rel="noopener">แจ้งข้อมูลที่ไม่ตรงกับพื้นที่</a></div>
+<section class="wrap sec" id="about">
+  <div class="card">
+    <h2>เว็บนี้คืออะไร</h2>
+    <p>ตำบลพร้อม สรุปว่าคนในแต่ละตำบลของจังหวัดจันทบุรีและระยองมีเงื่อนไขทางสังคมที่ทำให้รับมือและฟื้นตัวจากภัยได้ยากมากน้อยเพียงใด เช่น มีผู้สูงอายุมาก รายได้น้อย หรือติดต่อสื่อสารยาก แล้วแปลงเป็น 5 ระดับการเตรียมพร้อม เพื่อให้ชุมชน องค์กรปกครองส่วนท้องถิ่น และหน่วยงานใช้จัดลำดับการสนับสนุน</p>
+    <ul>
+      <li>ข้อมูลเป็นภาพรวมของทั้งตำบลในปี 2567 ไม่ได้บอกว่าบ้านไหนหรือใครเปราะบาง</li>
+      <li>ระดับที่สูงหมายถึง "ควรได้รับการสนับสนุนมากขึ้น" ไม่ใช่การจัดอันดับว่าชุมชนใดดีกว่ากัน</li>
+      <li>ตำบลที่ระดับต่ำไม่ได้แปลว่าปลอดภัย ยังต้องดูภัยที่เคยเกิดและเตรียมพร้อมตามฤดู</li>
+      <li>ตำบลในเขตเมืองบางแห่งข้อมูลสำรวจครอบคลุมครัวเรือนได้บางส่วน ค่าจึงอาจต่ำกว่าความเป็นจริง</li>
+    </ul>
+    <p>จัดทำโดยโครงการวิจัยการประเมินความเสี่ยงด้านภูมิอากาศจังหวัดระยองและจันทบุรี ผู้ที่ต้องการข้อมูลเชิงวิชาการ (ดัชนี SoVI ค่าสถิติ และแผนที่เชิงลึก) ดูได้ที่ <a href="https://juthasinee.github.io/SoVI-map/" target="_blank" rel="noopener">เว็บข้อมูลเชิงวิชาการ</a></p>
+    <div id="feedbackBox" class="hidden"><a class="btn amber" id="feedbackLink" target="_blank" rel="noopener">แจ้งข้อมูลที่ไม่ตรงกับพื้นที่</a></div>
+  </div>
 </section>
 </main>
-<footer>ข้อมูลปี 2567 · ปรับปรุง <span id="updated"></span> · ขอบเขตตำบลตามชั้นข้อมูลมาตรฐานของกรมแผนที่ทหาร (COD-AB)</footer>
+<footer><div class="wrap">
+  <span class="brand"><svg width="30" height="30" viewBox="0 0 64 64" fill="none" aria-hidden="true"><path d="M32 5C20.4 5 11 14.1 11 25.4 11 41.5 32 60 32 60s21-18.5 21-34.6C53 14.1 43.6 5 32 5z" fill="#FFFFFF"/><path d="M21.5 26.5l7.5 7.5 14-15" stroke="#0B5563" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="47" cy="47" r="9" fill="#E8A33D" stroke="#15262B" stroke-width="3"/></svg>Tambon<b>Prompt</b> · ตำบลพร้อม</span>
+  <span>พร้อมรู้ · พร้อมรับ · พร้อมฟื้น</span>
+  <span>ข้อมูลปี 2567 · ปรับปรุง <span id="updated"></span> · ขอบเขตตำบลตามชั้นข้อมูลมาตรฐานของกรมแผนที่ทหาร (COD-AB)</span>
+</div></footer>
 
 <script src="js/leaflet.js"></script>
 <script>
 var FEEDBACK_URL = "";   // ใส่ลิงก์ฟอร์มแจ้งข้อมูลเมื่อพร้อม
-var LCOL = {1:getComputedStyle(document.documentElement).getPropertyValue('--l1').trim(),2:getComputedStyle(document.documentElement).getPropertyValue('--l2').trim(),3:getComputedStyle(document.documentElement).getPropertyValue('--l3').trim(),4:getComputedStyle(document.documentElement).getPropertyValue('--l4').trim(),5:getComputedStyle(document.documentElement).getPropertyValue('--l5').trim()};
+var css=getComputedStyle(document.documentElement);var LCOL={1:css.getPropertyValue('--l1').trim(),2:css.getPropertyValue('--l2').trim(),3:css.getPropertyValue('--l3').trim(),4:css.getPropertyValue('--l4').trim(),5:css.getPropertyValue('--l5').trim()};
 var LSHORT = {1:'ตามปกติ',2:'ตามปกติ ติดตามข่าว',3:'เตรียมพร้อมเพิ่มขึ้น',4:'เตรียมพร้อมเป็นพิเศษ',5:'เป็นพิเศษ และขอการสนับสนุน'};
 var DIMNAME = {PC1:'ผู้สูงอายุมาก', PC2:'รายได้และการศึกษา', PC3:'การติดต่อสื่อสาร'};
-var DIMICON = {PC1:'👵', PC2:'🌾', PC3:'📢'};
+var DIMICON = {PC1:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>',
+ PC2:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M6 21V10l6-6 6 6v11"/><path d="M10 21v-5h4v5"/></svg>',
+ PC3:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h3l5 4V5L7 9H4a1 1 0 0 0-1 1z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></svg>'};
 var ACTS = {
  PC1:['ทำบัญชีผู้สูงอายุติดบ้าน ติดเตียง และผู้พิการในหมู่บ้าน พร้อมชื่อคนที่จะไปรับเมื่อต้องอพยพ','ซ้อมเดินเส้นทางจากบ้านไปจุดปลอดภัยกับผู้สูงอายุ และดูว่าใครต้องการรถหรือคนช่วยพยุง','จัดยาประจำตัว บัตรประชาชน และบัตรสิทธิรักษา ใส่ถุงพร้อมหิ้วไว้ที่เดิมเสมอ'],
  PC2:['ตรวจสิทธิบัตรสวัสดิการแห่งรัฐ เบี้ยยังชีพ และสิทธิรักษาพยาบาลของทุกคนในบ้านให้ครบ','ถ้าทำเกษตร สอบถาม อบต. หรือเกษตรอำเภอเรื่องการขึ้นทะเบียนเกษตรกรและการช่วยเหลือเมื่อเกิดภัย','ติดตามข่าวเตือนภัยจากแหล่งทางการ (กรมอุตุนิยมวิทยา ปภ.) แทนการรอฟังต่อ ๆ กัน'],
@@ -152,12 +211,12 @@ fetch('data/tambons.json').then(function(r){return r.json()}).then(function(d){D
 function initMap(){
   map=L.map('map',{attributionControl:false,scrollWheelZoom:false}).setView([12.8,101.8],8);
   L.control.scale({imperial:false}).addTo(map);
-  var osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:16,opacity:.6});osm.addTo(map);
-  geoLayer=L.geoJSON(GEO,{style:function(f){var t=byId[f.properties.id];return {fillColor:LCOL[t.level],fillOpacity:.85,color:'#fff',weight:1}},
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:16,opacity:.55}).addTo(map);
+  geoLayer=L.geoJSON(GEO,{style:function(f){var t=byId[f.properties.id];return {fillColor:LCOL[t.level],fillOpacity:.88,color:'#fff',weight:1}},
     onEachFeature:function(f,lyr){var t=byId[f.properties.id];
       lyr.bindTooltip('<b>ต.'+esc(t.tam)+'</b> อ.'+esc(t.amp)+'<br>'+LSHORT[t.level],{sticky:true,className:'tt'});
       lyr.on('click',function(){show(t.id)});
-      lyr.on('mouseover',function(){lyr.setStyle({weight:3,color:'#333'});lyr.bringToFront()});
+      lyr.on('mouseover',function(){lyr.setStyle({weight:3,color:'#15262B'});lyr.bringToFront()});
       lyr.on('mouseout',function(){geoLayer.resetStyle(lyr)});}}).addTo(map);
   map.fitBounds(geoLayer.getBounds(),{padding:[6,6]});
 }
@@ -182,7 +241,7 @@ function locate(lon,lat){var pt=[lon,lat];for(var k=0;k<GEO.features.length;k++)
 
 function show(id){var t=byId[id];if(!t)return;current=t;var L5=DATA.meta.levels[String(t.level)];var avg=DATA.meta.prov_avg[t.prov];
   document.getElementById('rTitle').textContent=fmtTam(t);
-  var lv=document.getElementById('rLevel');lv.className='level lvl'+t.level;lv.innerHTML='<div style="font-size:34px">'+['','🟢','🟢','🟡','🟠','🔴'][t.level].replace(/./g,'')+'</div><div><div class="big">ระดับ '+t.level+' จาก 5: '+esc(L5)+'</div><div class="sub">เทียบกับตำบลทั้งหมดของจันทบุรีและระยอง 134 ตำบล</div></div>';
+  var lv=document.getElementById('rLevel');lv.className='level lvl'+t.level;lv.innerHTML='<div><div class="big">ระดับ '+t.level+' จาก 5: '+esc(L5)+'</div><div class="sub">เทียบกับตำบลทั้งหมดของจันทบุรีและระยอง 134 ตำบล</div></div>';
   var note='ประชากรที่สำรวจ '+nf(t.pop)+' คน '+nf(t.hh)+' ครัวเรือน';
   if(t.coverage<40)note+=' · ข้อมูลสำรวจครอบคลุมประชากรตามทะเบียนราษฎรประมาณร้อยละ '+Math.round(t.coverage)+' ตัวเลขของตำบลเมืองจึงอาจต่ำกว่าความเป็นจริง';
   if(t.cluster==='HH')note+=' · ตำบลรอบ ๆ ก็อยู่ในระดับสูงเช่นกัน เหมาะกับการร่วมมือกันหลายตำบล';
@@ -191,8 +250,8 @@ function show(id){var t=byId[id];if(!t)return;current=t;var L5=DATA.meta.levels[
    ['PC2','ผู้ใหญ่ที่เรียนไม่ถึงมัธยมปลาย <b>'+t.lowedu_pct+'%</b> ('+cmpTxt(t.lowedu_cmp,avg.lowedu_pct+'%')+') · รายได้เฉลี่ย <b>'+nf(t.income)+'</b> บาทต่อคนต่อปี ('+cmpTxt(t.income_cmp,nf(avg.income)+' บาท')+')'],
    ['PC3','ครัวเรือนที่ไม่มีอินเทอร์เน็ตที่บ้าน <b>'+t.nonet_pct+'%</b> ('+cmpTxt(t.nonet_cmp,avg.nonet_pct+'%')+') · ครัวเรือนที่ไม่มีโทรศัพท์มือถือ '+t.nophone_pct+'% · ผู้สูงอายุที่ไม่มีรายได้ทางใดเลย '+nf(t.eld_noinc)+' คน จาก '+nf(t.eld_n)+' คน']];
   dims.sort(function(a,b){return t.pc[b[0]]-t.pc[a[0]]});
-  document.getElementById('rDims').innerHTML=dims.map(function(d){var f=t.pcflag[d[0]];return '<div class="dim"><div class="ico">'+DIMICON[d[0]]+'</div><div><b>'+DIMNAME[d[0]]+'</b><span class="tag'+(f==='สูง'?' hi':'')+'">'+(f==='สูง'?'เรื่องที่ต้องใส่ใจ':(f==='ต่ำ'?'ไม่ใช่ปัญหาหลัก':'ปานกลาง'))+'</span><br><span style="font-size:16px">'+d[1]+'</span></div></div>'}).join('');
-  var hz=[['🌊 น้ำท่วม',t.flood],['🌬️ ลมพายุ',t.storm],['☀️ ภัยแล้ง',t.drought]];
+  document.getElementById('rDims').innerHTML=dims.map(function(d){var f=t.pcflag[d[0]];return '<div class="dim"><div class="dico">'+DIMICON[d[0]]+'</div><div><b>'+DIMNAME[d[0]]+'</b><span class="tag'+(f==='สูง'?' hi':'')+'">'+(f==='สูง'?'เรื่องที่ต้องใส่ใจ':(f==='ต่ำ'?'ไม่ใช่ปัญหาหลัก':'ปานกลาง'))+'</span><br><span style="font-size:16px">'+d[1]+'</span></div></div>'}).join('');
+  var hz=[['น้ำท่วม',t.flood],['ลมพายุ',t.storm],['ภัยแล้ง',t.drought]];
   document.getElementById('rHaz').innerHTML=hz.map(function(h){return '<div class="pill">'+h[0]+'<br><b>'+(h[1]?h[1]+' หมู่บ้าน':'ไม่มีประกาศ')+'</b></div>'}).join('')+'<div class="muted" style="flex-basis:100%">จำนวนหมู่บ้านในตำบลที่ประกาศเป็นเขตพื้นที่ประสบภัย ปี 2567 (ข้อมูลกรมป้องกันและบรรเทาสาธารณภัย) ตำบลที่ไม่มีประกาศไม่ได้แปลว่าไม่มีความเสี่ยง</div>';
   document.getElementById('rSeason').textContent=season();
   var acts=ACTS[t.dom].concat(ACTS.ALL);var key='tr_'+t.id;var done={};try{done=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
@@ -211,6 +270,7 @@ function show(id){var t=byId[id];if(!t)return;current=t;var L5=DATA.meta.levels[
   if(geoLayer){geoLayer.eachLayer(function(l){if(l.feature.properties.id===t.id)map.fitBounds(l.getBounds(),{maxZoom:11,padding:[10,10]})})}
 }
 document.getElementById('backBtn').onclick=function(){document.getElementById('find').scrollIntoView({behavior:'smooth'});document.getElementById('q').focus()};
+document.getElementById('navResult').onclick=function(e){if(!current){e.preventDefault();document.getElementById('q').focus()}};
 document.getElementById('shareBtn').onclick=function(){var u=location.href.split('#')[0]+'#'+(current?current.id:'');
   if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){alert('คัดลอกลิงก์แล้ว: '+u)})}else prompt('คัดลอกลิงก์นี้',u)};
 window.addEventListener('hashchange',function(){var h=location.hash.replace('#','');if(h&&byId[h]&&(!current||current.id!==h))show(h)});
